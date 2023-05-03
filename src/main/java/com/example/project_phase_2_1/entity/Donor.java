@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "app_donor")
 //@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@username")
 public class Donor extends User {
-    public String name, surname;
+    public String name, surname, email, phone;
     @OneToMany(mappedBy = "donor", cascade = CascadeType.ALL)
     @JsonBackReference
     public List<Appointment> appointmentList;

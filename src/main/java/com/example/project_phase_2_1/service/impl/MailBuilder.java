@@ -18,25 +18,25 @@ public class MailBuilder implements MessageBuilder, Cloneable {
     }
 
     public MailBuilder(MailBuilder mailBuilder) {
-        if(recipient != null){
+        if(mailBuilder.recipient != null){
             this.recipient = mailBuilder.recipient;
         }
-        if(subject != null){
+        if(mailBuilder.subject != null){
             this.subject = mailBuilder.subject;
         }
-        if(greeting != null){
+        if(mailBuilder.greeting != null){
             this.greeting = mailBuilder.greeting;
         }
-        if(donorName != null){
+        if(mailBuilder.donorName != null){
             this.donorName = mailBuilder.donorName;
         }
-        if(message != null){
+        if(mailBuilder.message != null){
             this.message = mailBuilder.message;
         }
-        if(appointmentDateMessage != null){
+        if(mailBuilder.appointmentDateMessage != null){
             this.appointmentDateMessage = mailBuilder.appointmentDateMessage;
         }
-        if(appointmentDate != null){
+        if(mailBuilder.appointmentDate != null){
             this.appointmentDate = mailBuilder.appointmentDate;
         }
     }

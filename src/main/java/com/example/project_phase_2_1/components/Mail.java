@@ -1,6 +1,6 @@
 package com.example.project_phase_2_1.components;
 
-public class Mail {
+public class Mail { //TODO oare e bine cum e facut? In ce pachet ar trebui sa fie?
     private final String recipient;
     private final String subject;
     private final String greeting;

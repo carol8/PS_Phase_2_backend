@@ -54,9 +54,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         MailBuilder mailBuilder = new MailBuilder()
                 .setSubject("Programarea ta la donat de sange")
-                .setGreeting("Hi")
-                .setMessage("Te-ai programat cu succes la donat de sange!")
-                .setAppointmentDateMessage("Data programarii");
+                .setGreeting("Buna, ")
+                .setMessage("Te-ai programat cu succes la donat de sange.")
+                .setAppointmentDateMessage("Data programarii: ");
         this.mailBuilderRegistry.addMailBuilder("registerMail", mailBuilder);
     }
 
@@ -85,10 +85,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Optional<AppointmentDTO> createAppointment(AppointmentCreateDTO dto) {
         LocalDate date = LocalDate.parse(dto.date);
         Optional<Donor> donor = donorRepository.findById(dto.donor);
-        Optional<Location> location = locationRepository.findById(UUID.fromString(dto.location));//TODO
+        Optional<Location> location = locationRepository.findById(UUID.fromString(dto.location));//TODO securizare prin prevenirea crearii de mai multe appointments decat e posibil pentru data respectiva
         if (donor.isPresent() && location.isPresent()) {
             Appointment appointment = appointmentRepository.save(appointmentMapper.toAppointment(date, donor.get(), location.get()));
-            Mail mail = mailBuilderRegistry.getById("registerMail").setRecipient("cristib_2002@yahoo.com")
+            Mail mail = mailBuilderRegistry.getById("registerMail").clone()
+                    .setRecipient("cristib_2002@yahoo.com")
                     .setDonorName("Cristian")
                     .setAppointmentDate("10/10/2023")
                     .getResult();

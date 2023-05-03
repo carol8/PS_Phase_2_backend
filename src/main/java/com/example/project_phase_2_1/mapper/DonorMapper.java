@@ -17,6 +17,8 @@ public class DonorMapper {
         dto.username = donor.username;
         dto.name = donor.name;
         dto.surname = donor.surname;
+        dto.email = donor.email;
+        dto.phone = donor.phone;
         dto.appointmentList = donor.appointmentList;
         dto.locationList = locationList;
         return dto;
@@ -28,6 +30,8 @@ public class DonorMapper {
         donor.password = dto.password;
         donor.name = dto.name;
         donor.surname = dto.surname;
+        donor.email = dto.email;
+        donor.phone = dto.phone;
         return donor;
     }
 
@@ -36,6 +40,8 @@ public class DonorMapper {
         dto.username = donor.username;
         dto.name = donor.name;
         dto.surname = donor.surname;
+        dto.email = donor.email;
+        dto.phone = donor.phone;
         dto.appointmentList = donor.appointmentList;
         return dto;
     }
@@ -49,6 +55,12 @@ public class DonorMapper {
         }
         if (!dto.surname.isEmpty()) {
             donor.surname = dto.surname;
+        }
+        if (!dto.email.isEmpty()) {
+            donor.email = dto.email;
+        }
+        if (!dto.phone.isEmpty()) {
+            donor.phone = dto.phone;
         }
     }
 }
