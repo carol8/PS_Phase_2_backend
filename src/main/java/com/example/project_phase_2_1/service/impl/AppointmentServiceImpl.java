@@ -1,5 +1,6 @@
 package com.example.project_phase_2_1.service.impl;
 
+import com.example.project_phase_2_1.components.MailBuilderRegistry;
 import com.example.project_phase_2_1.dto.appointment.AppointmentCreateDTO;
 import com.example.project_phase_2_1.dto.appointment.AppointmentDTO;
 import com.example.project_phase_2_1.dto.appointment.AppointmentListDTO;
@@ -7,12 +8,15 @@ import com.example.project_phase_2_1.dto.appointment.AppointmentUpdateDTO;
 import com.example.project_phase_2_1.entity.Appointment;
 import com.example.project_phase_2_1.entity.Donor;
 import com.example.project_phase_2_1.entity.Location;
+import com.example.project_phase_2_1.components.Mail;
 import com.example.project_phase_2_1.mapper.AppointmentMapper;
 import com.example.project_phase_2_1.repository.AppointmentPageableRepository;
 import com.example.project_phase_2_1.repository.AppointmentRepository;
 import com.example.project_phase_2_1.repository.DonorRepository;
 import com.example.project_phase_2_1.repository.LocationRepository;
 import com.example.project_phase_2_1.service.AppointmentService;
+import com.example.project_phase_2_1.service.MessageSender;
+import jakarta.mail.MessagingException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -30,17 +34,30 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final DonorRepository donorRepository;
     private final LocationRepository locationRepository;
     private final AppointmentMapper appointmentMapper;
+    private final MailBuilderRegistry mailBuilderRegistry;
+    private final SenderFactory senderFactory;
 
     public AppointmentServiceImpl(AppointmentRepository appointmentRepository,
                                   AppointmentPageableRepository appointmentPageableRepository,
                                   DonorRepository donorRepository,
                                   LocationRepository locationRepository,
-                                  AppointmentMapper appointmentMapper) {
+                                  AppointmentMapper appointmentMapper,
+                                  MailBuilderRegistry mailBuilderRegistry,
+                                  SenderFactory senderFactory) {
         this.appointmentRepository = appointmentRepository;
         this.appointmentPageableRepository = appointmentPageableRepository;
         this.donorRepository = donorRepository;
         this.locationRepository = locationRepository;
         this.appointmentMapper = appointmentMapper;
+        this.mailBuilderRegistry = mailBuilderRegistry;
+        this.senderFactory = senderFactory;
+
+        MailBuilder mailBuilder = new MailBuilder()
+                .setSubject("Programarea ta la donat de sange")
+                .setGreeting("Hi")
+                .setMessage("Te-ai programat cu succes la donat de sange!")
+                .setAppointmentDateMessage("Data programarii");
+        this.mailBuilderRegistry.addMailBuilder("registerMail", mailBuilder);
     }
 
     @Override
@@ -71,6 +88,16 @@ public class AppointmentServiceImpl implements AppointmentService {
         Optional<Location> location = locationRepository.findById(UUID.fromString(dto.location));//TODO
         if (donor.isPresent() && location.isPresent()) {
             Appointment appointment = appointmentRepository.save(appointmentMapper.toAppointment(date, donor.get(), location.get()));
+            Mail mail = mailBuilderRegistry.getById("registerMail").setRecipient("cristib_2002@yahoo.com")
+                    .setDonorName("Cristian")
+                    .setAppointmentDate("10/10/2023")
+                    .getResult();
+            MessageSender messageSender = senderFactory.createSender(mail);
+            try {
+                messageSender.send();
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
             return Optional.of(appointmentMapper.toAppointmentDTO(appointment));
         }
         return Optional.empty();
