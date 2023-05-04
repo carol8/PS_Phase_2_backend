@@ -1,6 +1,9 @@
 package com.example.project_phase_2_1.service.impl;
 
+import com.example.project_phase_2_1.components.AppointmentSoonMail;
+import com.example.project_phase_2_1.components.ConfirmationMail;
 import com.example.project_phase_2_1.components.Mail;
+import com.example.project_phase_2_1.enums.MessageType;
 import com.example.project_phase_2_1.service.MessageBuilder;
 
 public class MailBuilder implements MessageBuilder, Cloneable {
@@ -12,6 +15,7 @@ public class MailBuilder implements MessageBuilder, Cloneable {
     private String message;
     private String appointmentDateMessage;
     private String appointmentDate;
+    private String endingMessage;
 
 
     public MailBuilder() {
@@ -38,6 +42,9 @@ public class MailBuilder implements MessageBuilder, Cloneable {
         }
         if(mailBuilder.appointmentDate != null){
             this.appointmentDate = mailBuilder.appointmentDate;
+        }
+        if(mailBuilder.endingMessage != null){
+            this.endingMessage = mailBuilder.endingMessage;
         }
     }
 
@@ -84,11 +91,25 @@ public class MailBuilder implements MessageBuilder, Cloneable {
     }
 
     @Override
+    public MailBuilder setEndingMessage(String message) {
+        this.endingMessage = message;
+        return this;
+    }
+
+    @Override
     public MailBuilder clone() {
         return new MailBuilder(this);
     }
 
-    public Mail getResult(){
-        return new Mail(recipient, subject, greeting, donorName, message, appointmentDateMessage, appointmentDate);
+    public Mail getResult(MessageType messageType){
+        switch (messageType){
+            case CONFIRMATION -> {
+                return new ConfirmationMail(recipient, subject, greeting, donorName, message, appointmentDateMessage, appointmentDate, endingMessage);
+            }
+            case APPOINTMENT_SOON -> {
+                return new AppointmentSoonMail(recipient, subject, greeting, donorName, message, appointmentDateMessage, appointmentDate, endingMessage);
+            }
+        }
+        return null;
     }
 }

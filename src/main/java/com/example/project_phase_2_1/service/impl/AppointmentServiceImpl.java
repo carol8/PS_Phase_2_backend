@@ -9,8 +9,8 @@ import com.example.project_phase_2_1.entity.Appointment;
 import com.example.project_phase_2_1.entity.Donor;
 import com.example.project_phase_2_1.entity.Location;
 import com.example.project_phase_2_1.components.Mail;
+import com.example.project_phase_2_1.enums.MessageType;
 import com.example.project_phase_2_1.mapper.AppointmentMapper;
-import com.example.project_phase_2_1.repository.AppointmentPageableRepository;
 import com.example.project_phase_2_1.repository.AppointmentRepository;
 import com.example.project_phase_2_1.repository.DonorRepository;
 import com.example.project_phase_2_1.repository.LocationRepository;
@@ -32,7 +32,6 @@ import java.util.UUID;
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
-    private final AppointmentPageableRepository appointmentPageableRepository;
     private final DonorRepository donorRepository;
     private final LocationRepository locationRepository;
     private final AppointmentMapper appointmentMapper;
@@ -41,26 +40,17 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final TaskExecutor asyncTaskExecutor = new SimpleAsyncTaskExecutor();
 
     public AppointmentServiceImpl(AppointmentRepository appointmentRepository,
-                                  AppointmentPageableRepository appointmentPageableRepository,
                                   DonorRepository donorRepository,
                                   LocationRepository locationRepository,
                                   AppointmentMapper appointmentMapper,
                                   MailBuilderRegistry mailBuilderRegistry,
                                   SenderFactory senderFactory) {
         this.appointmentRepository = appointmentRepository;
-        this.appointmentPageableRepository = appointmentPageableRepository;
         this.donorRepository = donorRepository;
         this.locationRepository = locationRepository;
         this.appointmentMapper = appointmentMapper;
         this.mailBuilderRegistry = mailBuilderRegistry;
         this.senderFactory = senderFactory;
-
-        MailBuilder mailBuilder = new MailBuilder()
-                .setSubject("Programarea ta la donat de sange")
-                .setGreeting("Buna, ")
-                .setMessage("Te-ai programat cu succes la donat de sange.")
-                .setAppointmentDateMessage("Data programarii: ");
-        this.mailBuilderRegistry.addMailBuilder("registerMail", mailBuilder);
     }
 
     @Override
@@ -78,7 +68,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Optional<AppointmentListDTO> getAppointmentList(String locationUuid, int pageNumber, int pageSize) {
         Optional<Location> locationOptional = locationRepository.findById(UUID.fromString(locationUuid));
         if (locationOptional.isPresent()) {
-            Page<Appointment> appointmentPage = appointmentPageableRepository.findAllByLocation(locationOptional.get(), PageRequest.of(pageNumber, pageSize, Sort.by("date")));
+            Page<Appointment> appointmentPage = appointmentRepository.findAllByLocation(locationOptional.get(), PageRequest.of(pageNumber, pageSize, Sort.by("date")));
             return Optional.of(appointmentMapper.toAppointmentListDTO(appointmentPage));
         }
         return Optional.empty();
@@ -94,11 +84,11 @@ public class AppointmentServiceImpl implements AppointmentService {
             Donor donor = donorOptional.get();
             if(Boolean.parseBoolean(dto.emailNotificationsEnabled)) {
                 asyncTaskExecutor.execute(() -> {
-                    Mail mail = mailBuilderRegistry.getById("registerMail").clone()
+                    Mail mail = mailBuilderRegistry.getById(MessageType.CONFIRMATION).clone()
                             .setRecipient(donor.email)
                             .setDonorName(donor.name)
                             .setAppointmentDate(dto.date)
-                            .getResult();
+                            .getResult(MessageType.CONFIRMATION);
                     MessageSender messageSender = senderFactory.createSender(mail);
                     try {
                         messageSender.send();

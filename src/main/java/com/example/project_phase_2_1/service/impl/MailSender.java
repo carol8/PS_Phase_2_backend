@@ -34,14 +34,8 @@ public class MailSender implements MessageSender {
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mail.getRecipient()));
         message.setSubject(mail.getSubject());
 
-        String mailMessage = mail.getGreeting() + mail.getDonorName()
-                + ",\n\n"
-                + mail.getMessage() +
-                "\n" +
-                mail.getAppointmentDateMessage() + mail.getAppointmentDate();
-
         MimeBodyPart mimeBodyPart = new MimeBodyPart();
-        mimeBodyPart.setContent(mailMessage, "text/html; charset=utf-8");
+        mimeBodyPart.setContent(mail.getMessage(), "text/html; charset=utf-8");
 
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(mimeBodyPart);

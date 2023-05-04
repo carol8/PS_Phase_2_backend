@@ -8,4 +8,6 @@ public interface MessageBuilder {
     MessageBuilder setMessage(String message);
     MessageBuilder setAppointmentDateMessage(String message);
     MessageBuilder setAppointmentDate(String appointmentDate);
+
+    MessageBuilder setEndingMessage(String message);
 }
