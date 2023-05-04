@@ -63,6 +63,4 @@ public class AppointmentController {
                 .map(appointmentDTO -> ResponseEntity.status(HttpStatus.OK).body(appointmentDTO))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
-
-
 }

@@ -18,7 +18,7 @@ public class Appointment {
     public UUID uuid;
 
     public LocalDate date;
-    public boolean isValid;
+    public boolean isValid, emailNotificationsEnabled, smsNotificationsEnabled;
 
     @ManyToOne
     @JoinColumn(name = "donor_username", nullable = false)

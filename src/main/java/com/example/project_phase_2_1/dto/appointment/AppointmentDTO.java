@@ -9,7 +9,7 @@ import java.util.UUID;
 public class AppointmentDTO {
     public UUID uuid;
     public LocalDate date;
-    public boolean isValid;
+    public boolean isValid, emailNotificationsEnabled, smsNotificationsEnabled;
     public Donor donor;
     public Location location;
 }

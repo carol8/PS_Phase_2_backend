@@ -17,6 +17,8 @@ import com.example.project_phase_2_1.repository.LocationRepository;
 import com.example.project_phase_2_1.service.AppointmentService;
 import com.example.project_phase_2_1.service.MessageSender;
 import jakarta.mail.MessagingException;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -36,6 +38,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentMapper appointmentMapper;
     private final MailBuilderRegistry mailBuilderRegistry;
     private final SenderFactory senderFactory;
+    private final TaskExecutor asyncTaskExecutor = new SimpleAsyncTaskExecutor();
 
     public AppointmentServiceImpl(AppointmentRepository appointmentRepository,
                                   AppointmentPageableRepository appointmentPageableRepository,
@@ -84,20 +87,25 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Optional<AppointmentDTO> createAppointment(AppointmentCreateDTO dto) {
         LocalDate date = LocalDate.parse(dto.date);
-        Optional<Donor> donor = donorRepository.findById(dto.donor);
-        Optional<Location> location = locationRepository.findById(UUID.fromString(dto.location));//TODO securizare prin prevenirea crearii de mai multe appointments decat e posibil pentru data respectiva
-        if (donor.isPresent() && location.isPresent()) {
-            Appointment appointment = appointmentRepository.save(appointmentMapper.toAppointment(date, donor.get(), location.get()));
-            Mail mail = mailBuilderRegistry.getById("registerMail").clone()
-                    .setRecipient("cristib_2002@yahoo.com")
-                    .setDonorName("Cristian")
-                    .setAppointmentDate("10/10/2023")
-                    .getResult();
-            MessageSender messageSender = senderFactory.createSender(mail);
-            try {
-                messageSender.send();
-            } catch (MessagingException e) {
-                throw new RuntimeException(e);
+        Optional<Donor> donorOptional = donorRepository.findById(dto.donor);
+        Optional<Location> locationOptional = locationRepository.findById(UUID.fromString(dto.location));//TODO securizare prin prevenirea crearii de mai multe appointments decat e posibil pentru data respectiva
+        if (donorOptional.isPresent() && locationOptional.isPresent()) {
+            Appointment appointment = appointmentRepository.save(appointmentMapper.toAppointment(dto, date, donorOptional.get(), locationOptional.get()));
+            Donor donor = donorOptional.get();
+            if(Boolean.parseBoolean(dto.emailNotificationsEnabled)) {
+                asyncTaskExecutor.execute(() -> {
+                    Mail mail = mailBuilderRegistry.getById("registerMail").clone()
+                            .setRecipient(donor.email)
+                            .setDonorName(donor.name)
+                            .setAppointmentDate(dto.date)
+                            .getResult();
+                    MessageSender messageSender = senderFactory.createSender(mail);
+                    try {
+                        messageSender.send();
+                    } catch (MessagingException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
             }
             return Optional.of(appointmentMapper.toAppointmentDTO(appointment));
         }

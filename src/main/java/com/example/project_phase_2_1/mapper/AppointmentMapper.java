@@ -1,5 +1,6 @@
 package com.example.project_phase_2_1.mapper;
 
+import com.example.project_phase_2_1.dto.appointment.AppointmentCreateDTO;
 import com.example.project_phase_2_1.dto.appointment.AppointmentDTO;
 import com.example.project_phase_2_1.dto.appointment.AppointmentListDTO;
 import com.example.project_phase_2_1.dto.appointment.AppointmentUpdateDTO;
@@ -15,12 +16,14 @@ import java.util.Optional;
 
 @Component
 public class AppointmentMapper {
-    public Appointment toAppointment(LocalDate date, Donor donor, Location location) {
+    public Appointment toAppointment(AppointmentCreateDTO dto, LocalDate date, Donor donor, Location location) {
         Appointment appointment = new Appointment();
         appointment.date = date;
         appointment.isValid = false;
         appointment.donor = donor;
         appointment.location = location;
+        appointment.emailNotificationsEnabled = Boolean.parseBoolean(dto.emailNotificationsEnabled);
+        appointment.smsNotificationsEnabled = Boolean.parseBoolean(dto.smsNotificationsEnabled);
         return appointment;
     }
 
@@ -31,6 +34,8 @@ public class AppointmentMapper {
         dto.isValid = appointment.isValid;
         dto.donor = appointment.donor;
         dto.location = appointment.location;
+        dto.emailNotificationsEnabled = appointment.emailNotificationsEnabled;
+        dto.smsNotificationsEnabled = appointment.smsNotificationsEnabled;
         return dto;
     }
 
@@ -53,6 +58,12 @@ public class AppointmentMapper {
         }
         if (dto.isValid != null && !dto.isValid.isEmpty()) {
             appointment.isValid = Boolean.parseBoolean(dto.isValid);
+        }
+        if (dto.smsNotificationsEnabled != null){
+            appointment.emailNotificationsEnabled = Boolean.parseBoolean(dto.emailNotificationsEnabled);
+        }
+        if (dto.smsNotificationsEnabled != null){
+            appointment.smsNotificationsEnabled = Boolean.parseBoolean(dto.smsNotificationsEnabled);
         }
         donorOptional.ifPresent(donor -> appointment.donor = donor);
         locationOptional.ifPresent(location -> appointment.location = location);
