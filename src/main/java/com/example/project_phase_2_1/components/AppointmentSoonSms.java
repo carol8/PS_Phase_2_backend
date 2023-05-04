@@ -7,6 +7,15 @@ public class AppointmentSoonSms extends Sms{
 
     @Override
     public String getMessage() {
-        return null;
+        return "\n\n" +
+                (greeting == null ? "" : greeting) +
+                (donorName == null ? "" : donorName) +
+                ",\n\n" +
+                (message == null ? "" : message) +
+                "\n" +
+                (appointmentDateMessage == null ? "" : appointmentDateMessage) +
+                (appointmentDate == null ? "" : appointmentDate) +
+                "\n\n" +
+                (endingMessage == null ? "" : endingMessage);
     }
 }

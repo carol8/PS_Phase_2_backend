@@ -1,10 +1,11 @@
 package com.example.project_phase_2_1.service.impl;
 
+import com.example.project_phase_2_1.components.*;
+import com.example.project_phase_2_1.enums.MessageType;
 import com.example.project_phase_2_1.service.MessageBuilder;
 
 public class SmsBuilder implements MessageBuilder, Cloneable {
     private String recipient;
-    private String subject;
     private String greeting;
     private String donorName;
     private String message;
@@ -19,9 +20,6 @@ public class SmsBuilder implements MessageBuilder, Cloneable {
     public SmsBuilder(SmsBuilder smsBuilder){
         if(smsBuilder.recipient != null){
             this.recipient = smsBuilder.recipient;
-        }
-        if(smsBuilder.subject != null){
-            this.subject = smsBuilder.subject;
         }
         if(smsBuilder.greeting != null){
             this.greeting = smsBuilder.greeting;
@@ -51,7 +49,6 @@ public class SmsBuilder implements MessageBuilder, Cloneable {
 
     @Override
     public SmsBuilder setSubject(String subject){
-        this.subject = subject;
         return this;
     }
 
@@ -96,5 +93,15 @@ public class SmsBuilder implements MessageBuilder, Cloneable {
         return new SmsBuilder(this);
     }
 
-    public Sms getResult
+    public Sms getResult(MessageType messageType){
+        switch (messageType){
+            case CONFIRMATION -> {
+                return new ConfirmationSms(recipient, greeting, donorName, message, appointmentDateMessage, appointmentDate, endingMessage);
+            }
+            case APPOINTMENT_SOON -> {
+                return new AppointmentSoonSms(recipient, greeting, donorName, message, appointmentDateMessage, appointmentDate, endingMessage);
+            }
+        }
+        return null;
+    }
 }
