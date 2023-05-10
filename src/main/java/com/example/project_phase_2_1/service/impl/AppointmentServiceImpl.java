@@ -17,7 +17,6 @@ import com.example.project_phase_2_1.repository.AppointmentRepository;
 import com.example.project_phase_2_1.repository.DonorRepository;
 import com.example.project_phase_2_1.repository.LocationRepository;
 import com.example.project_phase_2_1.service.AppointmentService;
-import com.example.project_phase_2_1.service.MessageSender;
 import jakarta.mail.MessagingException;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
@@ -152,3 +151,4 @@ public class AppointmentServiceImpl implements AppointmentService {
         return Optional.empty();
     }
 }
+

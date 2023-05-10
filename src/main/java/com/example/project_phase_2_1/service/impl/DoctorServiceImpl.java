@@ -6,7 +6,6 @@ import com.example.project_phase_2_1.dto.doctor.DoctorUpdateDTO;
 import com.example.project_phase_2_1.entity.Doctor;
 import com.example.project_phase_2_1.entity.Location;
 import com.example.project_phase_2_1.mapper.DoctorMapper;
-import com.example.project_phase_2_1.repository.AppointmentRepository;
 import com.example.project_phase_2_1.repository.DoctorRepository;
 import com.example.project_phase_2_1.repository.LocationRepository;
 import com.example.project_phase_2_1.service.DoctorService;
@@ -19,16 +18,13 @@ import java.util.UUID;
 public class DoctorServiceImpl implements DoctorService {
     private final DoctorRepository doctorRepository;
     private final LocationRepository locationRepository;
-    private final AppointmentRepository appointmentRepository;
     private final DoctorMapper doctorMapper;
 
     public DoctorServiceImpl(DoctorRepository doctorRepository,
                              LocationRepository locationRepository,
-                             AppointmentRepository appointmentRepository,
                              DoctorMapper doctorMapper) {
         this.doctorRepository = doctorRepository;
         this.locationRepository = locationRepository;
-        this.appointmentRepository = appointmentRepository;
         this.doctorMapper = doctorMapper;
     }
 

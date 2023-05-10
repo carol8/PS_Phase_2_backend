@@ -7,7 +7,6 @@ import com.example.project_phase_2_1.components.SmsBuilderRegistry;
 import com.example.project_phase_2_1.entity.Appointment;
 import com.example.project_phase_2_1.enums.MessageType;
 import com.example.project_phase_2_1.repository.AppointmentRepository;
-import com.example.project_phase_2_1.service.MessageSender;
 import jakarta.mail.MessagingException;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
@@ -15,8 +14,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
