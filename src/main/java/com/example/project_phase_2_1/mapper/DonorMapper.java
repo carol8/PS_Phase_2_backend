@@ -4,15 +4,17 @@ import com.example.project_phase_2_1.dto.donor.DonorCreateDTO;
 import com.example.project_phase_2_1.dto.donor.DonorDTO;
 import com.example.project_phase_2_1.dto.donor.DonorInfoDTO;
 import com.example.project_phase_2_1.dto.donor.DonorUpdateDTO;
+import com.example.project_phase_2_1.dto.extended_donor_data.ExtendedDonorDataDTO;
 import com.example.project_phase_2_1.entity.Donor;
 import com.example.project_phase_2_1.entity.Location;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class DonorMapper {
-    public DonorInfoDTO toInfoDTO(Donor donor, List<Location> locationList) {
+    public DonorInfoDTO toInfoDTO(Donor donor, List<Location> locationList, Optional<ExtendedDonorDataDTO> donorDataDTOOptional) {
         DonorInfoDTO dto = new DonorInfoDTO();
         dto.username = donor.username;
         dto.name = donor.name;
@@ -21,6 +23,7 @@ public class DonorMapper {
         dto.phone = donor.phone;
         dto.appointmentList = donor.appointmentList;
         dto.locationList = locationList;
+        donorDataDTOOptional.ifPresent(extendedDonorDataDTO -> dto.extendedDonorData = extendedDonorDataDTO);
         return dto;
     }
 
@@ -32,6 +35,7 @@ public class DonorMapper {
         donor.surname = dto.surname;
         donor.email = dto.email;
         donor.phone = dto.phone;
+        donor.cnp = dto.cnp;
         return donor;
     }
 

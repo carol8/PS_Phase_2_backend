@@ -43,10 +43,10 @@ VALUES ("5020506204963", "doctor@gmail.com", "Ion", "Ionel", "doctor", "78bb89be
        ("2020506204962", "doctor2@gmail.com", "Ionica", "Georgica", "doctor2", "78bb89be-0719-4a50-9b66-71c7eed8c8ce"),
        ("4020506204963", "doctor3@gmail.com", "Ionela", "Vasilica", "doctor3", "c606f98f-5550-4669-b079-01ce08392eaf");
 INSERT INTO app_donor
-VALUES ("donor@gmail.com", "Ion", "+40762770897", "Ionel", "donor"),
-       ("donor2@gmail.com","Andreea", "+40762770897", "Ionela", "donor2"),
-       ("donor3@gmail.com","Lorena", "+40762770897", "Gigi", "donor3"),
-       ("donor4@gmail.com","Gheorghe", "+40762770897", "Adrian", "donor4");
+VALUES ("5020506204962", "donor@gmail.com", "Ion", "+40762770897", "Ionel", "donor"),
+       ("5020506204964", "donor2@gmail.com","Andreea", "+40762770897", "Ionela", "donor2"),
+       ("5020506204965", "donor3@gmail.com","Lorena", "+40762770897", "Gigi", "donor3"),
+       ("5020506204966", "donor4@gmail.com","Gheorghe", "+40762770897", "Adrian", "donor4");
 INSERT INTO app_appointment
 VALUES ("db25d620-f9ec-4d06-911e-188104fbcb1e", "2023-05-05", true, false, true, "donor", "78bb89be-0719-4a50-9b66-71c7eed8c8ce"),
        ("72f11845-02e0-4602-af79-06da7b956074", "2023-05-05", true, false, true, "donor2", "78bb89be-0719-4a50-9b66-71c7eed8c8ce"),
