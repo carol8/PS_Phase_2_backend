@@ -59,23 +59,33 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Optional<AppointmentListDTO> getAppointmentList(String locationUuid, String todayDate) {
-        LocalDate today = LocalDate.parse(todayDate);
-        Optional<Location> locationOptional = locationRepository.findById(UUID.fromString(locationUuid));
-        if (locationOptional.isPresent()) {
-            List<Appointment> appointmentList = appointmentRepository.findAllByLocationAndDate(locationOptional.get(), today);
-            return Optional.of(appointmentMapper.toAppointmentListDTO(appointmentList));
+    public Optional<AppointmentListDTO> getAppointmentList(UUID locationUuid, Optional<String> todayDate, Optional<Integer> pageNumber, Optional<Integer> pageSize) {
+        LocalDate today = null;
+        int pNum = 0, pSize = Integer.MAX_VALUE;
+        if(todayDate.isPresent()) {
+            today = LocalDate.parse(todayDate.get());
         }
-        return Optional.empty();
-    }
 
-    @Override
-    public Optional<AppointmentListDTO> getAppointmentList(String locationUuid, int pageNumber, int pageSize) {
-        Optional<Location> locationOptional = locationRepository.findById(UUID.fromString(locationUuid));
+        if(pageNumber.isPresent()){
+            pNum = pageNumber.get();
+        }
+
+        if(pageSize.isPresent()){
+            pSize = pageSize.get();
+        }
+
+        Optional<Location> locationOptional = locationRepository.findById(locationUuid);
         if (locationOptional.isPresent()) {
-            Page<Appointment> appointmentPage = appointmentRepository.findAllByLocation(locationOptional.get(), PageRequest.of(pageNumber, pageSize, Sort.by("date")));
+            Page<Appointment> appointmentPage;
+            if(todayDate.isPresent()) {
+                appointmentPage = appointmentRepository.findAllByLocationAndDate(locationOptional.get(), today, PageRequest.of(pNum, pSize, Sort.by("date")));
+            }
+            else{
+                appointmentPage = appointmentRepository.findAllByLocation(locationOptional.get(), PageRequest.of(pNum, pSize, Sort.by("date")));
+            }
             return Optional.of(appointmentMapper.toAppointmentListDTO(appointmentPage));
         }
+
         return Optional.empty();
     }
 
@@ -130,7 +140,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 newDonor = donorRepository.findById(dto.donor);
             }
             Optional<Location> newLocation = Optional.empty();
-            if (dto.location != null && !dto.location.isEmpty()) { //TODO
+            if (dto.location != null && !dto.location.isEmpty()) {
                 newLocation = locationRepository.findById(UUID.fromString(dto.location));
             }
             appointmentMapper.updateAppointmentFromDTO(dto, newDonor, newLocation, appointment);

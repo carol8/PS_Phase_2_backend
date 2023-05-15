@@ -10,10 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @CrossOrigin
 @RestController
-// TODO
 public class AppointmentController {
     private final AppointmentService appointmentService;
 
@@ -21,22 +21,14 @@ public class AppointmentController {
         this.appointmentService = appointmentService;
     }
 
-    // appointments/location/{locationId}?date=
-    @GetMapping("/appointments/today")
-    ResponseEntity<AppointmentListDTO> getTodayAppointments(@RequestParam(name = "locationUuid") String locationUuid, @RequestParam(name = "todayDate") String todayDate) {
-        Optional<AppointmentListDTO> appointmentsListDTOOptional = appointmentService.getAppointmentList(locationUuid, todayDate);
+    @GetMapping("/appointments/locations/{locationUuid}")
+    ResponseEntity<AppointmentListDTO> getB(@PathVariable UUID locationUuid,
+                              @RequestParam Optional<String> date,
+                              @RequestParam Optional<Integer> pageNumber,
+                              @RequestParam Optional<Integer> pageSize){
+        Optional<AppointmentListDTO> appointmentsListDTOOptional = appointmentService.getAppointmentList(locationUuid, date, pageNumber, pageSize);
         return appointmentsListDTOOptional
-                .map(appointmentListDTO -> ResponseEntity.status(HttpStatus.CREATED).body(appointmentListDTO)) //TODO
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
-    }
-
-    @GetMapping("/appointments/all")
-    ResponseEntity<AppointmentListDTO> getTodayAppointments(@RequestParam(name = "locationUuid") String locationUuid,
-                                                            @RequestParam(name = "pageNumber") int pageNumber,
-                                                            @RequestParam(name = "pageSize") int pageSize) {
-        Optional<AppointmentListDTO> appointmentsListDTOOptional = appointmentService.getAppointmentList(locationUuid, pageNumber, pageSize);
-        return appointmentsListDTOOptional
-                .map(appointmentListDTO -> ResponseEntity.status(HttpStatus.CREATED).body(appointmentListDTO)) //TODO
+                .map(appointmentListDTO -> ResponseEntity.status(HttpStatus.CREATED).body(appointmentListDTO))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 

@@ -31,7 +31,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Optional<AdminInfoDTO> getAdminInfo(String username) {
         Optional<Admin> admin = adminRepository.findById(username);
-        if (admin.isPresent()) { //TODO
+        if (admin.isPresent()) { //TODO desparte pe call-uri
             List<Doctor> doctorList = doctorRepository.findAll();
             List<Location> locationList = locationRepository.findAll();
             return Optional.of(adminMapper.toInfoDTO(admin.get(), doctorList, locationList));

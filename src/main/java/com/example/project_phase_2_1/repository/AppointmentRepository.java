@@ -11,10 +11,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, UUID> {
-    Page<Appointment> findAllByLocation(Location location, Pageable pageable);
-
     List<Appointment> findAllByDate(LocalDate localDate);
-    List<Appointment> findAllByLocationAndDate(Location location, LocalDate localDate);
 
-
+    Page<Appointment> findAllByLocation(Location location, Pageable pageable);
+    Page<Appointment> findAllByLocationAndDate(Location location, LocalDate localDate, Pageable pageable);
 }
