@@ -11,5 +11,4 @@ public class LocationDTO {
     public String name, address;
     public LocalTime openingTime, closingTime;
     public int maximumDailyDonations;
-    public List<Appointment> appointmentList;
 }

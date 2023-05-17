@@ -22,13 +22,21 @@ public class AppointmentController {
     }
 
     @GetMapping("/appointments/locations/{locationUuid}")
-    ResponseEntity<AppointmentListDTO> getB(@PathVariable UUID locationUuid,
+    ResponseEntity<AppointmentListDTO> getAppointments(@PathVariable UUID locationUuid,
                               @RequestParam Optional<String> date,
                               @RequestParam Optional<Integer> pageNumber,
                               @RequestParam Optional<Integer> pageSize){
         Optional<AppointmentListDTO> appointmentsListDTOOptional = appointmentService.getAppointmentList(locationUuid, date, pageNumber, pageSize);
         return appointmentsListDTOOptional
-                .map(appointmentListDTO -> ResponseEntity.status(HttpStatus.CREATED).body(appointmentListDTO))
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+    }
+
+    @GetMapping("/appointments/donors/{username}")
+    ResponseEntity<AppointmentListDTO> getAppointments(@PathVariable String username){
+        Optional<AppointmentListDTO> appointmentListDTOOptional = appointmentService.getDonorAppointmentList(username);
+        return appointmentListDTOOptional
+                .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
@@ -40,16 +48,16 @@ public class AppointmentController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
-    @PatchMapping("/appointments")
-    ResponseEntity<AppointmentDTO> updateAppointment(@RequestBody AppointmentUpdateDTO dto) {
-        Optional<AppointmentDTO> appointmentDTOOptional = appointmentService.updateAppointment(dto);
+    @PatchMapping("/appointments/{uuid}")
+    ResponseEntity<AppointmentDTO> updateAppointment(@PathVariable UUID uuid, @RequestBody AppointmentUpdateDTO dto) {
+        Optional<AppointmentDTO> appointmentDTOOptional = appointmentService.updateAppointment(uuid, dto);
         return appointmentDTOOptional
                 .map(appointmentDTO -> ResponseEntity.status(HttpStatus.OK).body(appointmentDTO))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
-    @DeleteMapping("/appointments")
-    ResponseEntity<AppointmentDTO> deleteAppointment(@RequestParam(name = "uuid") String uuid) {
+    @DeleteMapping("/appointments/{uuid}")
+    ResponseEntity<AppointmentDTO> deleteAppointment(@PathVariable UUID uuid) {
         Optional<AppointmentDTO> appointmentDTOOptional = appointmentService.deleteAppointment(uuid);
         return appointmentDTOOptional
                 .map(appointmentDTO -> ResponseEntity.status(HttpStatus.OK).body(appointmentDTO))

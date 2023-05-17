@@ -8,11 +8,11 @@ import com.example.project_phase_2_1.dto.donor.DonorUpdateDTO;
 import java.util.Optional;
 
 public interface DonorService {
-    Optional<DonorInfoDTO> getDonorInfo(String username);
+    Optional<DonorDTO> getDonor(String username);
 
     Optional<DonorDTO> createDonor(DonorCreateDTO dto);
 
-    Optional<DonorDTO> updateDonor(DonorUpdateDTO dto);
+    Optional<DonorDTO> updateDonor(String username, DonorUpdateDTO dto);
 
     Optional<DonorDTO> deleteDonor(String username);
 }

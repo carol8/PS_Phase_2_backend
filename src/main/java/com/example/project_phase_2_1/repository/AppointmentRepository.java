@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, UUID> {
     List<Appointment> findAllByDate(LocalDate localDate);
-
+    List<Appointment> findAllByLocation(Location location);
     Page<Appointment> findAllByLocation(Location location, Pageable pageable);
     Page<Appointment> findAllByLocationAndDate(Location location, LocalDate localDate, Pageable pageable);
 }

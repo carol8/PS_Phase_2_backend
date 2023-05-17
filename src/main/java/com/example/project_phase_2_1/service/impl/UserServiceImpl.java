@@ -36,8 +36,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserDTO> authenticateUser(UserAuthenticateDTO dto) {
-        User user = userMapper.toUser(dto);
+    public Optional<UserDTO> authenticateUser(String username, UserAuthenticateDTO dto) {
+        User user = userMapper.toUser(username, dto);
         Optional<User> foundUser = userRepository.findById(user.username);
         if (foundUser.isPresent() && foundUser.get().password.equals(dto.password)) {
             return foundUser.map(userMapper::toDTO);

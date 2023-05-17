@@ -35,16 +35,9 @@ public class DonorServiceImpl implements DonorService {
     }
 
     @Override
-    public Optional<DonorInfoDTO> getDonorInfo(String username) {
+    public Optional<DonorDTO> getDonor(String username) {
         Optional<Donor> donorOptional = donorRepository.findById(username);
-        if (donorOptional.isPresent()) {
-            List<Location> locationList = locationRepository.findAll();
-            Donor donor = donorOptional.get();
-            Optional<ExtendedDonorDataDTO> dataDTO = extendedDonorDataService.getExtendedDonorData(donor.cnp);
-            return Optional.of(donorMapper.toInfoDTO(donor, locationList, dataDTO));
-        } else {
-            return Optional.empty();
-        }
+        return donorOptional.map(donorMapper::toDTO);
     }
 
     @Override
@@ -53,18 +46,18 @@ public class DonorServiceImpl implements DonorService {
             return Optional.empty();
         } else {
             Donor donor = donorRepository.save(donorMapper.toDonor(dto));
-            return Optional.of(donorMapper.toDonorDTO(donor));
+            return Optional.of(donorMapper.toDTO(donor));
         }
     }
 
     @Override
-    public Optional<DonorDTO> updateDonor(DonorUpdateDTO dto) {
-        Optional<Donor> donorOptional = donorRepository.findById(dto.username);
+    public Optional<DonorDTO> updateDonor(String username, DonorUpdateDTO dto) {
+        Optional<Donor> donorOptional = donorRepository.findById(username);
         if (donorOptional.isPresent()) {
             Donor donor = donorOptional.get();
             donorMapper.updateDonorFromDTO(dto, donor);
             donorRepository.save(donor);
-            return Optional.of(donorMapper.toDonorDTO(donor));
+            return Optional.of(donorMapper.toDTO(donor));
         }
         return Optional.empty();
     }
@@ -75,7 +68,7 @@ public class DonorServiceImpl implements DonorService {
         if (donorOptional.isPresent()) {
             Donor donor = donorOptional.get();
             donorRepository.delete(donor);
-            return Optional.of(donorMapper.toDonorDTO(donor));
+            return Optional.of(donorMapper.toDTO(donor));
         }
         return Optional.empty();
     }

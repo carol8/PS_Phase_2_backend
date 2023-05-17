@@ -2,6 +2,7 @@ package com.example.project_phase_2_1.service.impl;
 
 import com.example.project_phase_2_1.dto.doctor.DoctorCreateDTO;
 import com.example.project_phase_2_1.dto.doctor.DoctorDTO;
+import com.example.project_phase_2_1.dto.doctor.DoctorListDTO;
 import com.example.project_phase_2_1.dto.doctor.DoctorUpdateDTO;
 import com.example.project_phase_2_1.entity.Doctor;
 import com.example.project_phase_2_1.entity.Location;
@@ -11,6 +12,7 @@ import com.example.project_phase_2_1.repository.LocationRepository;
 import com.example.project_phase_2_1.service.DoctorService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,7 +31,13 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Optional<DoctorDTO> getDoctorInfo(String username) {
+    public DoctorListDTO getDoctors() {
+        List<Doctor> doctorList = doctorRepository.findAll();
+        return doctorMapper.toDoctorListDTO(doctorList);
+    }
+
+    @Override
+    public Optional<DoctorDTO> getDoctor(String username) {
         Optional<Doctor> doctor = doctorRepository.findById(username);
         return doctor.map(doctorMapper::toDoctorDTO);
     }
@@ -47,8 +55,8 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Optional<DoctorDTO> updateDoctor(DoctorUpdateDTO dto) {
-        Optional<Doctor> doctorOptional = doctorRepository.findById(dto.username);
+    public Optional<DoctorDTO> updateDoctor(String username, DoctorUpdateDTO dto) {
+        Optional<Doctor> doctorOptional = doctorRepository.findById(username);
         if (doctorOptional.isPresent()) {
             Doctor doctor = doctorOptional.get();
             Optional<Location> location = Optional.empty();

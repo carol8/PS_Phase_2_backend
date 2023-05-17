@@ -39,14 +39,13 @@ public class DonorMapper {
         return donor;
     }
 
-    public DonorDTO toDonorDTO(Donor donor) {
+    public DonorDTO toDTO(Donor donor) {
         DonorDTO dto = new DonorDTO();
         dto.username = donor.username;
         dto.name = donor.name;
         dto.surname = donor.surname;
         dto.email = donor.email;
         dto.phone = donor.phone;
-        dto.appointmentList = donor.appointmentList;
         return dto;
     }
 

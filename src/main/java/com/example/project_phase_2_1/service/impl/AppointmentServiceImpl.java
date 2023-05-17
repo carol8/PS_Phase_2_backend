@@ -17,6 +17,7 @@ import com.example.project_phase_2_1.repository.AppointmentRepository;
 import com.example.project_phase_2_1.repository.DonorRepository;
 import com.example.project_phase_2_1.repository.LocationRepository;
 import com.example.project_phase_2_1.service.AppointmentService;
+import com.twilio.rest.microvisor.v1.App;
 import jakarta.mail.MessagingException;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
@@ -90,49 +91,62 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    public Optional<AppointmentListDTO> getDonorAppointmentList(String username) {
+        Optional<Donor> donorOptional = donorRepository.findById(username);
+        return donorOptional.map(donor -> appointmentMapper.toAppointmentListDTO(donor.appointmentList));
+    }
+
+    @Override
     public Optional<AppointmentDTO> createAppointment(AppointmentCreateDTO dto) {
         LocalDate date = LocalDate.parse(dto.date);
         Optional<Donor> donorOptional = donorRepository.findById(dto.donor);
-        Optional<Location> locationOptional = locationRepository.findById(UUID.fromString(dto.location));//TODO securizare prin prevenirea crearii de mai multe appointments decat e posibil pentru data respectiva
+        Optional<Location> locationOptional = locationRepository.findById(UUID.fromString(dto.location));
         if (donorOptional.isPresent() && locationOptional.isPresent()) {
-            Appointment appointment = appointmentRepository.save(appointmentMapper.toAppointment(dto, date, donorOptional.get(), locationOptional.get()));
-            Donor donor = donorOptional.get();
-            if(Boolean.parseBoolean(dto.emailNotificationsEnabled)) {
-                asyncTaskExecutor.execute(() -> {
-                    Mail mail = mailBuilderRegistry.getById(MessageType.CONFIRMATION).clone()
-                            .setRecipient(donor.email)
-                            .setDonorName(donor.name)
-                            .setAppointmentDate(DateTimeFormatter.ISO_LOCAL_DATE.format(date))
-                            .getResult(MessageType.CONFIRMATION);
-                    try {
-                        senderFactory.createSender(mail).send();
-                    } catch (MessagingException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+            Location location = locationOptional.get();
+            List<Appointment> appointmentList = appointmentRepository.findAllByLocation(location);
+            List<Appointment> appointmentsAtDate = appointmentList.stream()
+                    .filter(appointment -> appointment.date.equals(date))
+                    .toList();
+            if(appointmentsAtDate.size() < location.maximumDailyDonations) {
+                Appointment appointment = appointmentRepository.save(appointmentMapper.toAppointment(dto, date, donorOptional.get(), locationOptional.get()));
+                Donor donor = donorOptional.get();
+                if (Boolean.parseBoolean(dto.emailNotificationsEnabled)) {
+                    asyncTaskExecutor.execute(() -> {
+                        Mail mail = mailBuilderRegistry.getById(MessageType.CONFIRMATION).clone()
+                                .setRecipient(donor.email)
+                                .setDonorName(donor.name)
+                                .setAppointmentDate(DateTimeFormatter.ISO_LOCAL_DATE.format(date))
+                                .getResult(MessageType.CONFIRMATION);
+                        try {
+                            senderFactory.createSender(mail).send();
+                        } catch (MessagingException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                }
+                if (Boolean.parseBoolean(dto.smsNotificationsEnabled)) {
+                    asyncTaskExecutor.execute(() -> {
+                        Sms sms = smsBuilderRegistry.getById(MessageType.CONFIRMATION).clone()
+                                .setRecipient(donor.phone)
+                                .setDonorName(donor.name)
+                                .setAppointmentDate(DateTimeFormatter.ISO_LOCAL_DATE.format(date))
+                                .getResult(MessageType.CONFIRMATION);
+                        try {
+                            senderFactory.createSender(sms).send();
+                        } catch (MessagingException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                }
+                return Optional.of(appointmentMapper.toAppointmentDTO(appointment));
             }
-            if(Boolean.parseBoolean(dto.smsNotificationsEnabled)){
-                asyncTaskExecutor.execute(() -> {
-                    Sms sms = smsBuilderRegistry.getById(MessageType.CONFIRMATION).clone()
-                            .setRecipient(donor.phone)
-                            .setDonorName(donor.name)
-                            .setAppointmentDate(DateTimeFormatter.ISO_LOCAL_DATE.format(date))
-                            .getResult(MessageType.CONFIRMATION);
-                    try {
-                        senderFactory.createSender(sms).send();
-                    } catch (MessagingException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-            }
-            return Optional.of(appointmentMapper.toAppointmentDTO(appointment));
         }
         return Optional.empty();
     }
 
     @Override
-    public Optional<AppointmentDTO> updateAppointment(AppointmentUpdateDTO dto) {
-        Optional<Appointment> appointmentOptional = appointmentRepository.findById(UUID.fromString(dto.uuid));
+    public Optional<AppointmentDTO> updateAppointment(UUID uuid, AppointmentUpdateDTO dto) {
+        Optional<Appointment> appointmentOptional = appointmentRepository.findById(uuid);
         if (appointmentOptional.isPresent()) {
             Appointment appointment = appointmentOptional.get();
             Optional<Donor> newDonor = Optional.empty();
@@ -151,8 +165,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Optional<AppointmentDTO> deleteAppointment(String uuid) {
-        Optional<Appointment> appointmentOptional = appointmentRepository.findById(UUID.fromString(uuid));
+    public Optional<AppointmentDTO> deleteAppointment(UUID uuid) {
+        Optional<Appointment> appointmentOptional = appointmentRepository.findById(uuid);
         if (appointmentOptional.isPresent()) {
             Appointment appointment = appointmentOptional.get();
             appointmentRepository.delete(appointment);

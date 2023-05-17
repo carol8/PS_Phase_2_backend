@@ -2,6 +2,7 @@ package com.example.project_phase_2_1.controller;
 
 import com.example.project_phase_2_1.dto.doctor.DoctorCreateDTO;
 import com.example.project_phase_2_1.dto.doctor.DoctorDTO;
+import com.example.project_phase_2_1.dto.doctor.DoctorListDTO;
 import com.example.project_phase_2_1.dto.doctor.DoctorUpdateDTO;
 import com.example.project_phase_2_1.service.DoctorService;
 import org.springframework.http.HttpStatus;
@@ -20,8 +21,14 @@ public class DoctorController {
     }
 
     @GetMapping("/doctors")
-    ResponseEntity<DoctorDTO> getDoctorInfo(@RequestParam(name = "username") String username) {
-        Optional<DoctorDTO> doctorInfoDTOOptional = doctorService.getDoctorInfo(username);
+    ResponseEntity<DoctorListDTO> getDoctors() {
+        DoctorListDTO doctorListDTO = doctorService.getDoctors();
+        return ResponseEntity.ok(doctorListDTO);
+    }
+
+    @GetMapping("/doctors/{username}")
+    ResponseEntity<DoctorDTO> getDoctor(@PathVariable String username) {
+        Optional<DoctorDTO> doctorInfoDTOOptional = doctorService.getDoctor(username);
         return doctorInfoDTOOptional
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
@@ -35,16 +42,16 @@ public class DoctorController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
-    @PatchMapping("/doctors")
-    ResponseEntity<DoctorDTO> updateDoctor(@RequestBody DoctorUpdateDTO dto) {
-        Optional<DoctorDTO> doctorInfoDTOOptional = doctorService.updateDoctor(dto);
+    @PatchMapping("/doctors/{username}")
+    ResponseEntity<DoctorDTO> updateDoctor(@PathVariable String username, @RequestBody DoctorUpdateDTO dto) {
+        Optional<DoctorDTO> doctorInfoDTOOptional = doctorService.updateDoctor(username, dto);
         return doctorInfoDTOOptional
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
-    @DeleteMapping("/doctors")
-    ResponseEntity<DoctorDTO> deleteDoctor(@RequestParam(name = "username") String username) {
+    @DeleteMapping("/doctors/{username}")
+    ResponseEntity<DoctorDTO> deleteDoctor(@PathVariable String username) {
         Optional<DoctorDTO> doctorInfoDTOOptional = doctorService.deleteDoctor(username);
         return doctorInfoDTOOptional
                 .map(ResponseEntity::ok)

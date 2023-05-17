@@ -1,6 +1,6 @@
 package com.example.project_phase_2_1.controller;
 
-import com.example.project_phase_2_1.dto.admin.AdminInfoDTO;
+import com.example.project_phase_2_1.dto.admin.AdminDTO;
 import com.example.project_phase_2_1.service.AdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +18,10 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @GetMapping("/admins")
-    ResponseEntity<AdminInfoDTO> getAdminInfo(@RequestParam(name = "username") String username) {
-        Optional<AdminInfoDTO> adminInfoDTOOptional = adminService.getAdminInfo(username);
-        return adminInfoDTOOptional
+    @GetMapping("/admins/{username}")
+    ResponseEntity<AdminDTO> getAdmin(@PathVariable String username) {
+        Optional<AdminDTO> adminDTOOptional = adminService.getAdminInfo(username);
+        return adminDTOOptional
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }

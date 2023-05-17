@@ -1,8 +1,11 @@
 package com.example.project_phase_2_1.mapper;
 
 import com.example.project_phase_2_1.dto.location.LocationDTO;
+import com.example.project_phase_2_1.dto.location.LocationListDTO;
 import com.example.project_phase_2_1.entity.Location;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class LocationMapper {
@@ -14,7 +17,12 @@ public class LocationMapper {
         dto.openingTime = location.openingTime;
         dto.closingTime = location.closingTime;
         dto.maximumDailyDonations = location.maximumDailyDonations;
-        dto.appointmentList = location.appointmentList;
         return dto;
+    }
+
+    public LocationListDTO toLocationListDTO(List<Location> locationList) {
+        LocationListDTO locationListDTO = new LocationListDTO();
+        locationListDTO.locationList = locationList;
+        return locationListDTO;
     }
 }

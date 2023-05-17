@@ -6,5 +6,4 @@ import java.util.List;
 
 public class DonorDTO {
     public String username, name, surname, email, phone;
-    public List<Appointment> appointmentList;
 }

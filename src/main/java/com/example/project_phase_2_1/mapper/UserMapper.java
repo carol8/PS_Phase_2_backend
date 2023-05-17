@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
-    public User toUser(UserAuthenticateDTO userAuthenticateDTO) {
+    public User toUser(String username, UserAuthenticateDTO userAuthenticateDTO) {
         User user = new User();
-        user.username = userAuthenticateDTO.username;
+        user.username = username;
         user.password = userAuthenticateDTO.password;
         return user;
     }

@@ -22,10 +22,10 @@ public class DonorController {
         this.donorService = donorService;
     }
 
-    @GetMapping("/donors")
-    ResponseEntity<DonorInfoDTO> getDonorInfo(@RequestParam(name = "username") String username) {
-        Optional<DonorInfoDTO> donorInfoDTOOptional = donorService.getDonorInfo(username);
-        return donorInfoDTOOptional
+    @GetMapping("/donors/{username}")
+    ResponseEntity<DonorDTO> getDonor(@PathVariable String username) {
+        Optional<DonorDTO> donorDTOOptional = donorService.getDonor(username);
+        return donorDTOOptional
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
@@ -38,16 +38,16 @@ public class DonorController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    @PatchMapping("/donors")
-    ResponseEntity<DonorDTO> updateDonor(@RequestBody DonorUpdateDTO dto) {
-        Optional<DonorDTO> donorDTOOptional = donorService.updateDonor(dto);
+    @PatchMapping("/donors/{username}")
+    ResponseEntity<DonorDTO> updateDonor(@PathVariable String username, @RequestBody DonorUpdateDTO dto) {
+        Optional<DonorDTO> donorDTOOptional = donorService.updateDonor(username, dto);
         return donorDTOOptional
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
-    @DeleteMapping("/donors")
-    ResponseEntity<DonorDTO> deleteDonor(@RequestParam(name = "username") String username) {
+    @DeleteMapping("/donors/{username}")
+    ResponseEntity<DonorDTO> deleteDonor(@PathVariable String username) {
         Optional<DonorDTO> donorDTOOptional = donorService.deleteDonor(username);
         return donorDTOOptional
                 .map(ResponseEntity::ok)

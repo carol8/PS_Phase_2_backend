@@ -1,9 +1,6 @@
 package com.example.project_phase_2_1.mapper;
 
-import com.example.project_phase_2_1.dto.doctor.DoctorCreateDTO;
-import com.example.project_phase_2_1.dto.doctor.DoctorDTO;
-import com.example.project_phase_2_1.dto.doctor.DoctorInfoDTO;
-import com.example.project_phase_2_1.dto.doctor.DoctorUpdateDTO;
+import com.example.project_phase_2_1.dto.doctor.*;
 import com.example.project_phase_2_1.entity.Appointment;
 import com.example.project_phase_2_1.entity.Doctor;
 import com.example.project_phase_2_1.entity.Location;
@@ -41,7 +38,12 @@ public class DoctorMapper {
         dto.surname = doctor.surname;
         dto.email = doctor.email;
         dto.cnp = doctor.cnp;
-        dto.location = doctor.location;
+        return dto;
+    }
+
+    public DoctorListDTO toDoctorListDTO(List<Doctor> doctorList){
+        DoctorListDTO dto = new DoctorListDTO();
+        dto.doctorList = doctorList;
         return dto;
     }
 
