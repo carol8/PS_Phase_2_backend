@@ -20,6 +20,7 @@ public class AppointmentMapper {
         Appointment appointment = new Appointment();
         appointment.date = date;
         appointment.isValid = false;
+        appointment.result = "";
         appointment.donor = donor;
         appointment.location = location;
         appointment.emailNotificationsEnabled = Boolean.parseBoolean(dto.emailNotificationsEnabled);
@@ -32,6 +33,7 @@ public class AppointmentMapper {
         dto.uuid = appointment.uuid;
         dto.date = appointment.date;
         dto.isValid = appointment.isValid;
+        dto.result = appointment.result;
         dto.donor = appointment.donor;
         dto.location = appointment.location;
         dto.emailNotificationsEnabled = appointment.emailNotificationsEnabled;
@@ -58,6 +60,9 @@ public class AppointmentMapper {
         }
         if (dto.isValid != null && !dto.isValid.isEmpty()) {
             appointment.isValid = Boolean.parseBoolean(dto.isValid);
+        }
+        if (dto.result != null && !dto.result.isEmpty()){
+            appointment.result = dto.result;
         }
         if (dto.smsNotificationsEnabled != null){
             appointment.emailNotificationsEnabled = Boolean.parseBoolean(dto.emailNotificationsEnabled);

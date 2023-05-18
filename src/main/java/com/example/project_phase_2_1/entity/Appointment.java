@@ -19,7 +19,7 @@ public class Appointment {
 
     public LocalDate date;
     public boolean isValid, emailNotificationsEnabled, smsNotificationsEnabled;
-    public String result; //TODO update all dtos
+    public String result;
 
     @ManyToOne
     @JoinColumn(name = "donor_username", nullable = false)

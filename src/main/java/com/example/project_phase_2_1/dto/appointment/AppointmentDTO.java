@@ -10,6 +10,7 @@ public class AppointmentDTO {
     public UUID uuid;
     public LocalDate date;
     public boolean isValid, emailNotificationsEnabled, smsNotificationsEnabled;
+    public String result;
     public Donor donor;
     public Location location;
 }
