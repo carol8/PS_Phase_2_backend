@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SenderFactory {
-    public MessageSender createSender(Mail mail) {
-        return new MailSender(mail);
+    public MessageSender createMailSender() {
+        return new MailSender();
     }
 
-    public MessageSender createSender(Sms sms) {
-        return new SmsSender(sms);
+    public MessageSender createSmsSender() {
+        return new SmsSender();
     }
 }

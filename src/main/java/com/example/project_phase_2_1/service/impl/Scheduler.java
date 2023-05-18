@@ -7,6 +7,7 @@ import com.example.project_phase_2_1.components.SmsBuilderRegistry;
 import com.example.project_phase_2_1.entity.Appointment;
 import com.example.project_phase_2_1.enums.MessageType;
 import com.example.project_phase_2_1.repository.AppointmentRepository;
+import com.example.project_phase_2_1.service.MessageSender;
 import jakarta.mail.MessagingException;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
@@ -37,6 +38,9 @@ public class Scheduler {
     @Scheduled(cron = "0 50 5 * * *")
 //    @Scheduled(fixedDelay = 30000)
     public void schedulingTest() {
+        MessageSender mailSender = senderFactory.createMailSender();
+        MessageSender smsSender = senderFactory.createSmsSender();
+
         List<Appointment> appointmentList = appointmentRepository.findAllByDate(LocalDate.now().plusDays(1));
         for (Appointment appointment : appointmentList) {
             if (appointment.emailNotificationsEnabled) {
@@ -46,7 +50,7 @@ public class Scheduler {
                             .setDonorName(appointment.donor.name)
                             .getResult(MessageType.APPOINTMENT_SOON);
                     try {
-                        senderFactory.createSender(mail).send();
+                        mailSender.send(mail);
                     } catch (MessagingException e) {
                         throw new RuntimeException(e);
                     }
@@ -59,7 +63,7 @@ public class Scheduler {
                             .setDonorName(appointment.donor.name)
                             .getResult(MessageType.APPOINTMENT_SOON);
                     try {
-                        senderFactory.createSender(sms).send();
+                        smsSender.send(sms);
                     } catch (MessagingException e) {
                         throw new RuntimeException(e);
                     }

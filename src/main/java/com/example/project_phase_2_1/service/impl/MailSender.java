@@ -1,5 +1,6 @@
 package com.example.project_phase_2_1.service.impl;
 
+import com.example.project_phase_2_1.components.BbMessage;
 import com.example.project_phase_2_1.components.Mail;
 import com.example.project_phase_2_1.service.MessageSender;
 import jakarta.mail.*;
@@ -11,15 +12,12 @@ import jakarta.mail.internet.MimeMultipart;
 import java.util.Properties;
 
 public class MailSender implements MessageSender {
+    public MailSender() {
 
-    private final Mail mail;
-
-    public MailSender(Mail mail) {
-        this.mail = mail;
     }
 
     @Override
-    public void send() throws MessagingException {
+    public void send(BbMessage mail) throws MessagingException {
         Properties properties = new Properties();
         properties.put("mail.debug", "true");
         properties.put("mail.smtp.auth", true);

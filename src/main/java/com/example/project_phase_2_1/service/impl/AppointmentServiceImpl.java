@@ -17,6 +17,7 @@ import com.example.project_phase_2_1.repository.AppointmentRepository;
 import com.example.project_phase_2_1.repository.DonorRepository;
 import com.example.project_phase_2_1.repository.LocationRepository;
 import com.example.project_phase_2_1.service.AppointmentService;
+import com.example.project_phase_2_1.service.MessageSender;
 import jakarta.mail.MessagingException;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
@@ -96,6 +97,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Optional<AppointmentDTO> createAppointment(AppointmentCreateDTO dto) {
+        MessageSender mailSender = senderFactory.createMailSender();
+        MessageSender smsSender = senderFactory.createSmsSender();
+
         LocalDate date = LocalDate.parse(dto.date);
         Optional<Donor> donorOptional = donorRepository.findById(dto.donor);
         Optional<Location> locationOptional = locationRepository.findById(UUID.fromString(dto.location));
@@ -116,7 +120,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                                 .setAppointmentDate(DateTimeFormatter.ISO_LOCAL_DATE.format(date))
                                 .getResult(MessageType.CONFIRMATION);
                         try {
-                            senderFactory.createSender(mail).send();
+                            mailSender.send(mail);
                         } catch (MessagingException e) {
                             throw new RuntimeException(e);
                         }
@@ -130,7 +134,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                                 .setAppointmentDate(DateTimeFormatter.ISO_LOCAL_DATE.format(date))
                                 .getResult(MessageType.CONFIRMATION);
                         try {
-                            senderFactory.createSender(sms).send();
+                            smsSender.send(sms);
                         } catch (MessagingException e) {
                             throw new RuntimeException(e);
                         }

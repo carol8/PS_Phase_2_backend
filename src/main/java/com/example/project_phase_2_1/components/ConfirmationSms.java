@@ -18,4 +18,9 @@ public class ConfirmationSms extends Sms {
                 "\n\n" +
                 (endingMessage == null ? "" : endingMessage);
     }
+
+    @Override
+    public String getSubject() {
+        return null;
+    }
 }
