@@ -14,19 +14,6 @@ import java.util.Optional;
 
 @Component
 public class DonorMapper {
-    public DonorInfoDTO toInfoDTO(Donor donor, List<Location> locationList, Optional<ExtendedDonorDataDTO> donorDataDTOOptional) {
-        DonorInfoDTO dto = new DonorInfoDTO();
-        dto.username = donor.username;
-        dto.name = donor.name;
-        dto.surname = donor.surname;
-        dto.email = donor.email;
-        dto.phone = donor.phone;
-        dto.appointmentList = donor.appointmentList;
-        dto.locationList = locationList;
-        donorDataDTOOptional.ifPresent(extendedDonorDataDTO -> dto.extendedDonorData = extendedDonorDataDTO);
-        return dto;
-    }
-
     public Donor toDonor(DonorCreateDTO dto) {
         Donor donor = new Donor();
         donor.username = dto.username;
@@ -46,6 +33,7 @@ public class DonorMapper {
         dto.surname = donor.surname;
         dto.email = donor.email;
         dto.phone = donor.phone;
+        dto.cnp = donor.cnp;
         return dto;
     }
 

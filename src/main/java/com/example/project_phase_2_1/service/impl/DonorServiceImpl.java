@@ -2,11 +2,8 @@ package com.example.project_phase_2_1.service.impl;
 
 import com.example.project_phase_2_1.dto.donor.DonorCreateDTO;
 import com.example.project_phase_2_1.dto.donor.DonorDTO;
-import com.example.project_phase_2_1.dto.donor.DonorInfoDTO;
 import com.example.project_phase_2_1.dto.donor.DonorUpdateDTO;
-import com.example.project_phase_2_1.dto.extended_donor_data.ExtendedDonorDataDTO;
 import com.example.project_phase_2_1.entity.Donor;
-import com.example.project_phase_2_1.entity.Location;
 import com.example.project_phase_2_1.mapper.DonorMapper;
 import com.example.project_phase_2_1.repository.DonorRepository;
 import com.example.project_phase_2_1.repository.LocationRepository;
@@ -14,7 +11,6 @@ import com.example.project_phase_2_1.service.DonorService;
 import com.example.project_phase_2_1.service.ExtendedDonorDataService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service

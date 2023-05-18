@@ -2,11 +2,8 @@ package com.example.project_phase_2_1.controller;
 
 import com.example.project_phase_2_1.dto.donor.DonorCreateDTO;
 import com.example.project_phase_2_1.dto.donor.DonorDTO;
-import com.example.project_phase_2_1.dto.donor.DonorInfoDTO;
 import com.example.project_phase_2_1.dto.donor.DonorUpdateDTO;
-import com.example.project_phase_2_1.dto.extended_donor_data.ExtendedDonorDataDTO;
 import com.example.project_phase_2_1.service.DonorService;
-import com.example.project_phase_2_1.service.ExtendedDonorDataService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
