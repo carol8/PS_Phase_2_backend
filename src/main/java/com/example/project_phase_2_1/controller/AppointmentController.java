@@ -57,8 +57,8 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/appointments/{uuid}")
-    ResponseEntity<AppointmentDTO> deleteAppointment(@PathVariable UUID uuid) {
-        Optional<AppointmentDTO> appointmentDTOOptional = appointmentService.deleteAppointment(uuid);
+    ResponseEntity<AppointmentDTO> deleteAppointment(@PathVariable UUID uuid, @RequestParam(name = "current_date") String currentDate) {
+        Optional<AppointmentDTO> appointmentDTOOptional = appointmentService.deleteAppointment(uuid, currentDate);
         return appointmentDTOOptional
                 .map(appointmentDTO -> ResponseEntity.status(HttpStatus.OK).body(appointmentDTO))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());

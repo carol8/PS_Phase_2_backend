@@ -163,12 +163,15 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Optional<AppointmentDTO> deleteAppointment(UUID uuid) {
+    public Optional<AppointmentDTO> deleteAppointment(UUID uuid, String currentDate) {
+        LocalDate date = LocalDate.parse(currentDate);
         Optional<Appointment> appointmentOptional = appointmentRepository.findById(uuid);
         if (appointmentOptional.isPresent()) {
             Appointment appointment = appointmentOptional.get();
-            appointmentRepository.delete(appointment);
-            return Optional.of(appointmentMapper.toAppointmentDTO(appointment));
+            if(appointment.date.isEqual(date) || appointment.date.isAfter(date)) {
+                appointmentRepository.delete(appointment);
+                return Optional.of(appointmentMapper.toAppointmentDTO(appointment));
+            }
         }
         return Optional.empty();
     }

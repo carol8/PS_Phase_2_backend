@@ -17,5 +17,5 @@ public interface AppointmentService {
 
     Optional<AppointmentDTO> updateAppointment(UUID uuid, AppointmentUpdateDTO dto);
 
-    Optional<AppointmentDTO> deleteAppointment(UUID uuid);
+    Optional<AppointmentDTO> deleteAppointment(UUID uuid, String currentDate);
 }
