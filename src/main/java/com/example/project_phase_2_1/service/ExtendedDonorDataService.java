@@ -8,7 +8,10 @@ import java.util.Optional;
 
 public interface ExtendedDonorDataService {
     Optional<ExtendedDonorDataDTO> getExtendedDonorData(String cnp);
+
     Optional<ExtendedDonorDataDTO> createExtendedDonorData(ExtendedDonorDataCreateDTO dto);
+
     Optional<ExtendedDonorDataDTO> updateOrCreateExtendedDonorData(String cnp, ExtendedDonorDataUpdateDTO dto);
+
     Optional<ExtendedDonorDataDTO> deleteExtendedDonorData(String cnp);
 }

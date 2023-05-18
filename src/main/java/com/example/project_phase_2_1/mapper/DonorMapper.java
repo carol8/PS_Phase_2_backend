@@ -2,15 +2,9 @@ package com.example.project_phase_2_1.mapper;
 
 import com.example.project_phase_2_1.dto.donor.DonorCreateDTO;
 import com.example.project_phase_2_1.dto.donor.DonorDTO;
-import com.example.project_phase_2_1.dto.donor.DonorInfoDTO;
 import com.example.project_phase_2_1.dto.donor.DonorUpdateDTO;
-import com.example.project_phase_2_1.dto.extended_donor_data.ExtendedDonorDataDTO;
 import com.example.project_phase_2_1.entity.Donor;
-import com.example.project_phase_2_1.entity.Location;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Optional;
 
 @Component
 public class DonorMapper {

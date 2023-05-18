@@ -3,7 +3,6 @@ package com.example.project_phase_2_1.controller;
 import com.example.project_phase_2_1.dto.user.UserAuthenticateDTO;
 import com.example.project_phase_2_1.dto.user.UserDTO;
 import com.example.project_phase_2_1.dto.user.UserRoleDTO;
-import com.example.project_phase_2_1.entity.User;
 import com.example.project_phase_2_1.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

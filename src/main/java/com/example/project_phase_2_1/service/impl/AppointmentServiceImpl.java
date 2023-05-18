@@ -1,5 +1,6 @@
 package com.example.project_phase_2_1.service.impl;
 
+import com.example.project_phase_2_1.components.Mail;
 import com.example.project_phase_2_1.components.MailBuilderRegistry;
 import com.example.project_phase_2_1.components.Sms;
 import com.example.project_phase_2_1.components.SmsBuilderRegistry;
@@ -10,14 +11,12 @@ import com.example.project_phase_2_1.dto.appointment.AppointmentUpdateDTO;
 import com.example.project_phase_2_1.entity.Appointment;
 import com.example.project_phase_2_1.entity.Donor;
 import com.example.project_phase_2_1.entity.Location;
-import com.example.project_phase_2_1.components.Mail;
 import com.example.project_phase_2_1.enums.MessageType;
 import com.example.project_phase_2_1.mapper.AppointmentMapper;
 import com.example.project_phase_2_1.repository.AppointmentRepository;
 import com.example.project_phase_2_1.repository.DonorRepository;
 import com.example.project_phase_2_1.repository.LocationRepository;
 import com.example.project_phase_2_1.service.AppointmentService;
-import com.twilio.rest.microvisor.v1.App;
 import jakarta.mail.MessagingException;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
@@ -63,25 +62,24 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Optional<AppointmentListDTO> getAppointmentList(UUID locationUuid, Optional<String> todayDate, Optional<Integer> pageNumber, Optional<Integer> pageSize) {
         LocalDate today = null;
         int pNum = 0, pSize = Integer.MAX_VALUE;
-        if(todayDate.isPresent()) {
+        if (todayDate.isPresent()) {
             today = LocalDate.parse(todayDate.get());
         }
 
-        if(pageNumber.isPresent()){
+        if (pageNumber.isPresent()) {
             pNum = pageNumber.get();
         }
 
-        if(pageSize.isPresent()){
+        if (pageSize.isPresent()) {
             pSize = pageSize.get();
         }
 
         Optional<Location> locationOptional = locationRepository.findById(locationUuid);
         if (locationOptional.isPresent()) {
             Page<Appointment> appointmentPage;
-            if(todayDate.isPresent()) {
+            if (todayDate.isPresent()) {
                 appointmentPage = appointmentRepository.findAllByLocationAndDate(locationOptional.get(), today, PageRequest.of(pNum, pSize, Sort.by("date")));
-            }
-            else{
+            } else {
                 appointmentPage = appointmentRepository.findAllByLocation(locationOptional.get(), PageRequest.of(pNum, pSize, Sort.by("date")));
             }
             return Optional.of(appointmentMapper.toAppointmentListDTO(appointmentPage));
@@ -107,7 +105,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             List<Appointment> appointmentsAtDate = appointmentList.stream()
                     .filter(appointment -> appointment.date.equals(date))
                     .toList();
-            if(appointmentsAtDate.size() < location.maximumDailyDonations) {
+            if (appointmentsAtDate.size() < location.maximumDailyDonations) {
                 Appointment appointment = appointmentRepository.save(appointmentMapper.toAppointment(dto, date, donorOptional.get(), locationOptional.get()));
                 Donor donor = donorOptional.get();
                 if (Boolean.parseBoolean(dto.emailNotificationsEnabled)) {

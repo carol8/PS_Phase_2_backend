@@ -23,9 +23,9 @@ public class AppointmentController {
 
     @GetMapping("/appointments/locations/{locationUuid}")
     ResponseEntity<AppointmentListDTO> getAppointments(@PathVariable UUID locationUuid,
-                              @RequestParam Optional<String> date,
-                              @RequestParam Optional<Integer> pageNumber,
-                              @RequestParam Optional<Integer> pageSize){
+                                                       @RequestParam Optional<String> date,
+                                                       @RequestParam Optional<Integer> pageNumber,
+                                                       @RequestParam Optional<Integer> pageSize) {
         Optional<AppointmentListDTO> appointmentsListDTOOptional = appointmentService.getAppointmentList(locationUuid, date, pageNumber, pageSize);
         return appointmentsListDTOOptional
                 .map(ResponseEntity::ok)
@@ -33,7 +33,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/appointments/donors/{username}")
-    ResponseEntity<AppointmentListDTO> getAppointments(@PathVariable String username){
+    ResponseEntity<AppointmentListDTO> getAppointments(@PathVariable String username) {
         Optional<AppointmentListDTO> appointmentListDTOOptional = appointmentService.getDonorAppointmentList(username);
         return appointmentListDTOOptional
                 .map(ResponseEntity::ok)

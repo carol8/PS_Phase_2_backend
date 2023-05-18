@@ -1,6 +1,6 @@
 package com.example.project_phase_2_1.components;
 
-public class AppointmentSoonMail extends Mail{
+public class AppointmentSoonMail extends Mail {
     public AppointmentSoonMail(String recipient,
                                String subject,
                                String greeting,

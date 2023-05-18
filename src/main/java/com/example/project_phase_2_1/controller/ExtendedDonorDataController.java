@@ -15,12 +15,12 @@ import java.util.Optional;
 public class ExtendedDonorDataController {
     private final ExtendedDonorDataService extendedDonorDataService;
 
-    public ExtendedDonorDataController(ExtendedDonorDataService extendedDonorDataService){
+    public ExtendedDonorDataController(ExtendedDonorDataService extendedDonorDataService) {
         this.extendedDonorDataService = extendedDonorDataService;
     }
 
     @GetMapping("/donors/extended/{cnp}")
-    ResponseEntity<ExtendedDonorDataDTO> getExtendedDonorData(@PathVariable String cnp){
+    ResponseEntity<ExtendedDonorDataDTO> getExtendedDonorData(@PathVariable String cnp) {
         Optional<ExtendedDonorDataDTO> extendedDonorDataDTOOptional = extendedDonorDataService.getExtendedDonorData(cnp);
         return extendedDonorDataDTOOptional
                 .map(ResponseEntity::ok)
@@ -28,7 +28,7 @@ public class ExtendedDonorDataController {
     }
 
     @PostMapping("/donors/extended")
-    ResponseEntity<ExtendedDonorDataDTO> createExtendedDonorData(@RequestBody ExtendedDonorDataCreateDTO dto){
+    ResponseEntity<ExtendedDonorDataDTO> createExtendedDonorData(@RequestBody ExtendedDonorDataCreateDTO dto) {
         Optional<ExtendedDonorDataDTO> extendedDonorDataDTOOptional = extendedDonorDataService.createExtendedDonorData(dto);
         return extendedDonorDataDTOOptional
                 .map(ResponseEntity::ok)
@@ -36,7 +36,7 @@ public class ExtendedDonorDataController {
     }
 
     @PutMapping("/donors/extended/{cnp}")
-    ResponseEntity<ExtendedDonorDataDTO> updateOrCreateExtendedDonorData(@PathVariable String cnp, @RequestBody ExtendedDonorDataUpdateDTO dto){
+    ResponseEntity<ExtendedDonorDataDTO> updateOrCreateExtendedDonorData(@PathVariable String cnp, @RequestBody ExtendedDonorDataUpdateDTO dto) {
         Optional<ExtendedDonorDataDTO> extendedDonorDataDTOOptional = extendedDonorDataService.updateOrCreateExtendedDonorData(cnp, dto);
         return extendedDonorDataDTOOptional
                 .map(ResponseEntity::ok)
@@ -44,7 +44,7 @@ public class ExtendedDonorDataController {
     }
 
     @DeleteMapping("/donors/extended/{cnp}")
-    ResponseEntity<ExtendedDonorDataDTO> deleteExtendedDonorData(@PathVariable String cnp){
+    ResponseEntity<ExtendedDonorDataDTO> deleteExtendedDonorData(@PathVariable String cnp) {
         Optional<ExtendedDonorDataDTO> extendedDonorDataDTOOptional = extendedDonorDataService.deleteExtendedDonorData(cnp);
         return extendedDonorDataDTOOptional
                 .map(ResponseEntity::ok)

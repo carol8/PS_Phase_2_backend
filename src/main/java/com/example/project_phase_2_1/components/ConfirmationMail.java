@@ -1,6 +1,6 @@
 package com.example.project_phase_2_1.components;
 
-public class ConfirmationMail extends Mail{
+public class ConfirmationMail extends Mail {
     public ConfirmationMail(String recipient,
                             String subject,
                             String greeting,

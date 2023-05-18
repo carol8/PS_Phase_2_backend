@@ -10,12 +10,12 @@ public abstract class Sms {
     protected final String endingMessage;
 
     public Sms(String recipient,
-                String greeting,
-                String donorName,
-                String message,
-                String appointmentDateMessage,
-                String appointmentDate,
-                String endingMessage) {
+               String greeting,
+               String donorName,
+               String message,
+               String appointmentDateMessage,
+               String appointmentDate,
+               String endingMessage) {
         this.recipient = recipient;
         this.greeting = greeting;
         this.donorName = donorName;

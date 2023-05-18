@@ -61,13 +61,13 @@ public class AppointmentMapper {
         if (dto.isValid != null && !dto.isValid.isEmpty()) {
             appointment.isValid = Boolean.parseBoolean(dto.isValid);
         }
-        if (dto.result != null && !dto.result.isEmpty()){
+        if (dto.result != null && !dto.result.isEmpty()) {
             appointment.result = dto.result;
         }
-        if (dto.smsNotificationsEnabled != null){
+        if (dto.smsNotificationsEnabled != null) {
             appointment.emailNotificationsEnabled = Boolean.parseBoolean(dto.emailNotificationsEnabled);
         }
-        if (dto.smsNotificationsEnabled != null){
+        if (dto.smsNotificationsEnabled != null) {
             appointment.smsNotificationsEnabled = Boolean.parseBoolean(dto.smsNotificationsEnabled);
         }
         donorOptional.ifPresent(donor -> appointment.donor = donor);

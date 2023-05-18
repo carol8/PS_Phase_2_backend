@@ -12,7 +12,7 @@ public class SmsSender implements MessageSender {
     private final String ACCOUNT_SID = System.getenv("TWILIO_ACCOUNT_SID");
     private final String AUTH_TOKEN = System.getenv("TWILIO_AUTH_TOKEN");
 
-    public SmsSender(Sms sms){
+    public SmsSender(Sms sms) {
         this.sms = sms;
     }
 

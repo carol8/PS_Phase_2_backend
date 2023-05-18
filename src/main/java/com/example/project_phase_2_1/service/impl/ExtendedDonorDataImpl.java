@@ -4,9 +4,9 @@ import com.example.project_phase_2_1.dto.extended_donor_data.ExtendedDonorDataCr
 import com.example.project_phase_2_1.dto.extended_donor_data.ExtendedDonorDataDTO;
 import com.example.project_phase_2_1.dto.extended_donor_data.ExtendedDonorDataUpdateDTO;
 import com.example.project_phase_2_1.service.ExtendedDonorDataService;
-import org.springframework.http.*;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -16,20 +16,21 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class ExtendedDonorDataImpl implements ExtendedDonorDataService {
     private final WebClient webClient = WebClient.create("http://localhost:8081");
+
     @Override
     public Optional<ExtendedDonorDataDTO> getExtendedDonorData(String cnp) {
         try {
             ResponseEntity<ExtendedDonorDataDTO> responseEntity = webClient.get()
                     .uri(uriBuilder -> uriBuilder
-                        .path("/donors/extended/{cnp}")
-                        .build(cnp))
+                            .path("/donors/extended/{cnp}")
+                            .build(cnp))
                     .retrieve()
                     .toEntity(ExtendedDonorDataDTO.class)
                     .toFuture()
                     .get();
-            if(responseEntity.getStatusCode().is2xxSuccessful()){
+            if (responseEntity.getStatusCode().is2xxSuccessful()) {
                 ExtendedDonorDataDTO dto = responseEntity.getBody();
-                if(dto != null) {
+                if (dto != null) {
                     return Optional.of(dto);
                 }
             }
@@ -41,7 +42,7 @@ public class ExtendedDonorDataImpl implements ExtendedDonorDataService {
 
     @Override
     public Optional<ExtendedDonorDataDTO> createExtendedDonorData(ExtendedDonorDataCreateDTO dto) {
-        try{
+        try {
             ResponseEntity<ExtendedDonorDataDTO> responseEntity = webClient.post()
                     .uri(uriBuilder -> uriBuilder
                             .path("/donors/extended")
@@ -52,7 +53,7 @@ public class ExtendedDonorDataImpl implements ExtendedDonorDataService {
                     .toEntity(ExtendedDonorDataDTO.class)
                     .toFuture()
                     .get();
-            if(responseEntity.getStatusCode().is2xxSuccessful()) {
+            if (responseEntity.getStatusCode().is2xxSuccessful()) {
                 ExtendedDonorDataDTO extendedDonorDataDTO = responseEntity.getBody();
                 if (extendedDonorDataDTO != null) {
                     return Optional.of(extendedDonorDataDTO);
@@ -66,7 +67,7 @@ public class ExtendedDonorDataImpl implements ExtendedDonorDataService {
 
     @Override
     public Optional<ExtendedDonorDataDTO> updateOrCreateExtendedDonorData(String cnp, ExtendedDonorDataUpdateDTO dto) {
-        try{
+        try {
             ResponseEntity<ExtendedDonorDataDTO> responseEntity = webClient.put()
                     .uri(uriBuilder -> uriBuilder
                             .path("/donors/extended/{cnp}")
@@ -77,7 +78,7 @@ public class ExtendedDonorDataImpl implements ExtendedDonorDataService {
                     .toEntity(ExtendedDonorDataDTO.class)
                     .toFuture()
                     .get();
-            if(responseEntity.getStatusCode().is2xxSuccessful()) {
+            if (responseEntity.getStatusCode().is2xxSuccessful()) {
                 ExtendedDonorDataDTO extendedDonorDataDTO = responseEntity.getBody();
                 if (extendedDonorDataDTO != null) {
                     return Optional.of(extendedDonorDataDTO);

@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface DoctorService {
     DoctorListDTO getDoctors();
+
     Optional<DoctorDTO> getDoctor(String username);
 
     Optional<DoctorDTO> createDoctor(DoctorCreateDTO dto);

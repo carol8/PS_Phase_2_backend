@@ -22,28 +22,28 @@ public class MailBuilder implements MessageBuilder, Cloneable {
     }
 
     public MailBuilder(MailBuilder mailBuilder) {
-        if(mailBuilder.recipient != null){
+        if (mailBuilder.recipient != null) {
             this.recipient = mailBuilder.recipient;
         }
-        if(mailBuilder.subject != null){
+        if (mailBuilder.subject != null) {
             this.subject = mailBuilder.subject;
         }
-        if(mailBuilder.greeting != null){
+        if (mailBuilder.greeting != null) {
             this.greeting = mailBuilder.greeting;
         }
-        if(mailBuilder.donorName != null){
+        if (mailBuilder.donorName != null) {
             this.donorName = mailBuilder.donorName;
         }
-        if(mailBuilder.message != null){
+        if (mailBuilder.message != null) {
             this.message = mailBuilder.message;
         }
-        if(mailBuilder.appointmentDateMessage != null){
+        if (mailBuilder.appointmentDateMessage != null) {
             this.appointmentDateMessage = mailBuilder.appointmentDateMessage;
         }
-        if(mailBuilder.appointmentDate != null){
+        if (mailBuilder.appointmentDate != null) {
             this.appointmentDate = mailBuilder.appointmentDate;
         }
-        if(mailBuilder.endingMessage != null){
+        if (mailBuilder.endingMessage != null) {
             this.endingMessage = mailBuilder.endingMessage;
         }
     }
@@ -55,7 +55,7 @@ public class MailBuilder implements MessageBuilder, Cloneable {
     }
 
     @Override
-    public MailBuilder setSubject(String subject){
+    public MailBuilder setSubject(String subject) {
         this.subject = subject;
         return this;
     }
@@ -79,7 +79,7 @@ public class MailBuilder implements MessageBuilder, Cloneable {
     }
 
     @Override
-    public MailBuilder setAppointmentDateMessage(String message){
+    public MailBuilder setAppointmentDateMessage(String message) {
         this.appointmentDateMessage = message;
         return this;
     }
@@ -101,8 +101,8 @@ public class MailBuilder implements MessageBuilder, Cloneable {
         return new MailBuilder(this);
     }
 
-    public Mail getResult(MessageType messageType){
-        switch (messageType){
+    public Mail getResult(MessageType messageType) {
+        switch (messageType) {
             case CONFIRMATION -> {
                 return new ConfirmationMail(recipient, subject, greeting, donorName, message, appointmentDateMessage, appointmentDate, endingMessage);
             }

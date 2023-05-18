@@ -10,8 +10,12 @@ import java.util.UUID;
 
 public interface AppointmentService {
     Optional<AppointmentListDTO> getAppointmentList(UUID locationUuid, Optional<String> date, Optional<Integer> pageNumber, Optional<Integer> pageSize);
+
     Optional<AppointmentListDTO> getDonorAppointmentList(String username);
+
     Optional<AppointmentDTO> createAppointment(AppointmentCreateDTO dto);
+
     Optional<AppointmentDTO> updateAppointment(UUID uuid, AppointmentUpdateDTO dto);
+
     Optional<AppointmentDTO> deleteAppointment(UUID uuid);
 }

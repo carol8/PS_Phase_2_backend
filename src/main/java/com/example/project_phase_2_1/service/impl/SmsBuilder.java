@@ -1,6 +1,8 @@
 package com.example.project_phase_2_1.service.impl;
 
-import com.example.project_phase_2_1.components.*;
+import com.example.project_phase_2_1.components.AppointmentSoonSms;
+import com.example.project_phase_2_1.components.ConfirmationSms;
+import com.example.project_phase_2_1.components.Sms;
 import com.example.project_phase_2_1.enums.MessageType;
 import com.example.project_phase_2_1.service.MessageBuilder;
 
@@ -13,30 +15,30 @@ public class SmsBuilder implements MessageBuilder, Cloneable {
     private String appointmentDate;
     private String endingMessage;
 
-    public SmsBuilder(){
+    public SmsBuilder() {
 
     }
 
-    public SmsBuilder(SmsBuilder smsBuilder){
-        if(smsBuilder.recipient != null){
+    public SmsBuilder(SmsBuilder smsBuilder) {
+        if (smsBuilder.recipient != null) {
             this.recipient = smsBuilder.recipient;
         }
-        if(smsBuilder.greeting != null){
+        if (smsBuilder.greeting != null) {
             this.greeting = smsBuilder.greeting;
         }
-        if(smsBuilder.donorName != null){
+        if (smsBuilder.donorName != null) {
             this.donorName = smsBuilder.donorName;
         }
-        if(smsBuilder.message != null){
+        if (smsBuilder.message != null) {
             this.message = smsBuilder.message;
         }
-        if(smsBuilder.appointmentDateMessage != null){
+        if (smsBuilder.appointmentDateMessage != null) {
             this.appointmentDateMessage = smsBuilder.appointmentDateMessage;
         }
-        if(smsBuilder.appointmentDate != null){
+        if (smsBuilder.appointmentDate != null) {
             this.appointmentDate = smsBuilder.appointmentDate;
         }
-        if(smsBuilder.endingMessage != null){
+        if (smsBuilder.endingMessage != null) {
             this.endingMessage = smsBuilder.endingMessage;
         }
     }
@@ -48,7 +50,7 @@ public class SmsBuilder implements MessageBuilder, Cloneable {
     }
 
     @Override
-    public SmsBuilder setSubject(String subject){
+    public SmsBuilder setSubject(String subject) {
         return this;
     }
 
@@ -71,7 +73,7 @@ public class SmsBuilder implements MessageBuilder, Cloneable {
     }
 
     @Override
-    public SmsBuilder setAppointmentDateMessage(String message){
+    public SmsBuilder setAppointmentDateMessage(String message) {
         this.appointmentDateMessage = message;
         return this;
     }
@@ -93,8 +95,8 @@ public class SmsBuilder implements MessageBuilder, Cloneable {
         return new SmsBuilder(this);
     }
 
-    public Sms getResult(MessageType messageType){
-        switch (messageType){
+    public Sms getResult(MessageType messageType) {
+        switch (messageType) {
             case CONFIRMATION -> {
                 return new ConfirmationSms(recipient, greeting, donorName, message, appointmentDateMessage, appointmentDate, endingMessage);
             }

@@ -11,7 +11,7 @@ import java.util.Map;
 public class MailBuilderRegistry {
     private final Map<MessageType, MailBuilder> mailBuildersMap = new HashMap<>();
 
-    public MailBuilderRegistry(){
+    public MailBuilderRegistry() {
         addMailBuilder(MessageType.CONFIRMATION, new MailBuilder()
                 .setSubject("Confirmare programare donatie de sange")
                 .setGreeting("Buna ")
@@ -25,11 +25,11 @@ public class MailBuilderRegistry {
                 .setEndingMessage("Cu stima,\nEchipa ps_bloodbank"));
     }
 
-    private void addMailBuilder(MessageType messageType, MailBuilder mailBuilder){
+    private void addMailBuilder(MessageType messageType, MailBuilder mailBuilder) {
         mailBuildersMap.put(messageType, mailBuilder);
     }
 
-    public MailBuilder getById(MessageType messageType){
+    public MailBuilder getById(MessageType messageType) {
         return mailBuildersMap.get(messageType);
     }
 }

@@ -41,7 +41,7 @@ public class DoctorMapper {
         return dto;
     }
 
-    public DoctorListDTO toDoctorListDTO(List<Doctor> doctorList){
+    public DoctorListDTO toDoctorListDTO(List<Doctor> doctorList) {
         DoctorListDTO dto = new DoctorListDTO();
         dto.doctorList = doctorList;
         return dto;

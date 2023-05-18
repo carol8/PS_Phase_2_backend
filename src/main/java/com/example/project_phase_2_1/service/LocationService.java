@@ -8,6 +8,8 @@ import java.util.UUID;
 
 public interface LocationService {
     LocationListDTO getLocations();
+
     Optional<LocationDTO> getLocation(UUID uuid);
+
     Optional<LocationDTO> getDoctorLocation(String username);
 }

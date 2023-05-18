@@ -6,9 +6,7 @@ import com.example.project_phase_2_1.dto.donor.DonorUpdateDTO;
 import com.example.project_phase_2_1.entity.Donor;
 import com.example.project_phase_2_1.mapper.DonorMapper;
 import com.example.project_phase_2_1.repository.DonorRepository;
-import com.example.project_phase_2_1.repository.LocationRepository;
 import com.example.project_phase_2_1.service.DonorService;
-import com.example.project_phase_2_1.service.ExtendedDonorDataService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,18 +14,11 @@ import java.util.Optional;
 @Service
 public class DonorServiceImpl implements DonorService {
     private final DonorRepository donorRepository;
-    private final LocationRepository locationRepository;
     private final DonorMapper donorMapper;
-    private final ExtendedDonorDataService extendedDonorDataService;
 
-    public DonorServiceImpl(DonorRepository donorRepository,
-                            LocationRepository locationRepository,
-                            DonorMapper donorMapper,
-                            ExtendedDonorDataService extendedDonorDataService) {
+    public DonorServiceImpl(DonorRepository donorRepository, DonorMapper donorMapper) {
         this.donorRepository = donorRepository;
-        this.locationRepository = locationRepository;
         this.donorMapper = donorMapper;
-        this.extendedDonorDataService = extendedDonorDataService;
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.util.Map;
 public class SmsBuilderRegistry {
     private final Map<MessageType, SmsBuilder> smsBuilderMap = new HashMap<>();
 
-    public SmsBuilderRegistry(){
+    public SmsBuilderRegistry() {
         addSmsBuilder(MessageType.CONFIRMATION, new SmsBuilder()
                 .setSubject("Confirmare programare donatie de sange")
                 .setGreeting("Buna ")
@@ -25,11 +25,11 @@ public class SmsBuilderRegistry {
                 .setEndingMessage("Cu stima,\nEchipa ps_bloodbank"));
     }
 
-    private void addSmsBuilder(MessageType messageType, SmsBuilder smsBuilder){
+    private void addSmsBuilder(MessageType messageType, SmsBuilder smsBuilder) {
         smsBuilderMap.put(messageType, smsBuilder);
     }
 
-    public SmsBuilder getById(MessageType messageType){
+    public SmsBuilder getById(MessageType messageType) {
         return smsBuilderMap.get(messageType);
     }
 }

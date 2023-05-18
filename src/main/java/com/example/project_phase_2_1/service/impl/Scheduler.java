@@ -27,7 +27,7 @@ public class Scheduler {
     public Scheduler(AppointmentRepository appointmentRepository,
                      MailBuilderRegistry mailBuilderRegistry,
                      SmsBuilderRegistry smsBuilderRegistry,
-                     SenderFactory senderFactory){
+                     SenderFactory senderFactory) {
         this.appointmentRepository = appointmentRepository;
         this.mailBuilderRegistry = mailBuilderRegistry;
         this.smsBuilderRegistry = smsBuilderRegistry;
@@ -36,10 +36,10 @@ public class Scheduler {
 
     @Scheduled(cron = "0 50 5 * * *")
 //    @Scheduled(fixedDelay = 30000)
-    public void schedulingTest(){
+    public void schedulingTest() {
         List<Appointment> appointmentList = appointmentRepository.findAllByDate(LocalDate.now().plusDays(1));
-        for(Appointment appointment : appointmentList){
-            if(appointment.emailNotificationsEnabled){
+        for (Appointment appointment : appointmentList) {
+            if (appointment.emailNotificationsEnabled) {
                 asyncTaskExecutor.execute(() -> {
                     Mail mail = mailBuilderRegistry.getById(MessageType.APPOINTMENT_SOON)
                             .setRecipient(appointment.donor.email)
@@ -52,7 +52,7 @@ public class Scheduler {
                     }
                 });
             }
-            if(appointment.smsNotificationsEnabled){
+            if (appointment.smsNotificationsEnabled) {
                 asyncTaskExecutor.execute(() -> {
                     Sms sms = smsBuilderRegistry.getById(MessageType.APPOINTMENT_SOON).clone()
                             .setRecipient(appointment.donor.phone)

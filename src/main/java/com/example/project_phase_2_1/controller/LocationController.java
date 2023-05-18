@@ -5,7 +5,10 @@ import com.example.project_phase_2_1.dto.location.LocationListDTO;
 import com.example.project_phase_2_1.service.LocationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -20,7 +23,7 @@ public class LocationController {
     }
 
     @GetMapping("/locations")
-    ResponseEntity<LocationListDTO> getLocations(){
+    ResponseEntity<LocationListDTO> getLocations() {
         return ResponseEntity.ok(locationService.getLocations());
     }
 
@@ -33,7 +36,7 @@ public class LocationController {
     }
 
     @GetMapping("/locations/doctors/{username}")
-    ResponseEntity<LocationDTO> getDoctorLocation(@PathVariable String username){
+    ResponseEntity<LocationDTO> getDoctorLocation(@PathVariable String username) {
         Optional<LocationDTO> locationDTOOptional = locationService.getDoctorLocation(username);
         return locationDTOOptional
                 .map(ResponseEntity::ok)
